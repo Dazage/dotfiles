@@ -1,0 +1,44 @@
+#!/usr/bin/env sh
+
+# package manager
+alias \
+    pkg="sudo dnf" \
+    upd="sudo dnf upgrade"
+
+# standard utilities
+alias \
+    ls="ls -hG --color=auto" \
+	l="ls -lA" \
+	ll="ls -l" \
+	grep="grep -G" \
+	rm="rm -i" \
+	mv="mv -i" \
+	fp="flatpak" \
+	ka="killall -I" \
+	gis="git status" \
+	gisuno="git status -uno" \
+	gip="git pull" \
+	open="xdg-open"
+
+# related to personal config
+alias \
+	mpdscribble="mpdscribble --conf ~/.config/mpd/mpdscribble/mpdscribble.conf" \
+	mci="sudo make clean install" \
+	mcrm="make clean && rm -f config.h && git reset --hard origin/master"
+	sc="shellcheck" \
+	starwars="telnet towel.blinkenlights.nl" \
+	rsfetch='rsfetch -PdehHikrstuUw -p apt'
+
+# edit files
+alias \
+	eb="$EDITOR ~/.bashrc" \
+	ea="$EDITOR ~/.config/shellconfig/aliasrc" \
+	ez="$EDITOR ~/.config/zsh/.zshrc" \
+	ecl="emacsclient" \
+	enw="emacs -Q -nw" \
+	vim="nvim"
+
+# dns related
+alias \
+    alias post='host -t mx' \
+    alias epic='echo "whoops TODO"'

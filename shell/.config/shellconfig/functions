@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# How much music?
+hmm() {
+    artists="$(mpc list Artist | sed '/^\s*$/d' | wc -l) artists."
+    albums="$(mpc list Album | sed '/^\s*$/d' | wc -l) albums."
+    songs="$(mpc list Title | sed '/^\s*$/d' | wc -l) songs."
+    size="Which uses up $(\du -hs $HOME/Music | cut -f1)B of storage."
+    echo -e "\nYou have:\n---------\n$artists\n$albums\n$songs\n\n$size\n"
+}
