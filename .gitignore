@@ -1,4 +1,5 @@
 /*-install.log
+/git/.config/git/config
 /tmux/.config/tmux/plugins/*
 /shell/.config/zsh/.zlua
 /shell/.config/zsh/.zcompdump
