@@ -1,4 +1,4 @@
-# Daz's config for the Zoomer Shell
+# dmt's config the Z shell
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -28,7 +28,7 @@ zstyle ':completion:*' menu select
 # Auto complete with case insenstivity
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 # Partial completion suggestions (cd /u/lo/b -> cd /usr/local/bin)
-zstyle ':completion:*' list-suffixes zstyle ':completion:*' expand prefix suffix 
+zstyle ':completion:*' list-suffixeszstyle ':completion:*' expand prefix suffix
 
 zmodload zsh/complist
 compinit
@@ -110,7 +110,7 @@ SPACESHIP_TERRAFORM_SHOW=false
 SPACESHIP_VI_MODE_SHOW=false
 SPACESHIP_JOBS_SHOW=false
 
-eval "$(lua ~/.config/zsh/z.lua --init zsh enhanced)"
+#eval "$(lua ~/.config/zsh/z.lua --init zsh enhanced)"
 
 # Minimal prompt. Found here: https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 PROMPT='%(?.%F{green}√.%F{red}?%?)%f %B%F{240}%1~%f%b %# '
