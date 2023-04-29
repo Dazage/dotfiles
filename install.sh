@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+# install all packages provided as arguments, log relevant output and ignore errors
 pkginstall() {
-  $pkginst "$@" >> "$HOME/.dotfiles/$(date +%F)-install.log"
+  $pkginst "$@" >> "$HOME/.dotfiles/$(date +%F)-install.log" 2> /dev/null
 }
 
 setup_fonts() {
