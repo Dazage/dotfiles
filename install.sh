@@ -10,7 +10,16 @@ setup_fonts() {
 }
 
 setup_git() {
+  git_config="$HOME/.dotfiles/git/.config/git/config"
+  if ! grep 'setup_done' "$git_config"; then
+    echo 'Setting up git config...'
+    read -rp 'Enter your GitHub username: ' git_name
+    sed -i '' "s/^name.*/name = $git_name/g" "$git_config"
+    read -rp 'Enter your GitHub email address: ' git_email
+    sed -i '' "s/^email.*/email = $git_email/g" "$git_config"
+    echo '# setup_done #' >> "$git_config"
   stow -t "$HOME" git
+  fi
 }
 
 setup_gnupg() {
