@@ -41,7 +41,6 @@ setup_shell() {
   stow -t "$HOME" shell
 }
 
-# TODO make tmux auto-install plugins as part of this script
 setup_tmux() {
   git clone https://github.com/tmux-plugins/tpm $HOME/.dotfiles/tmux/.config/tmux/plugins/tpm > /dev/null 2>&1
   stow -t "$HOME" tmux
