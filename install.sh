@@ -53,13 +53,13 @@ setup_placeholders() {
 }
 
 # DETERMINE PACKAGE MANAGER
-which brew > /dev/null 2>&1 && pkginst="brew install -y"
-which dnf > /dev/null 2>&1 && pkginst="sudo dnf install -y"
-which pacman > /dev/null 2>&1 && pkginst="sudo pacman -S -y"
-which pkg > /dev/null 2>&1 && pkginst="pkg install -y"
+which brew > /dev/null 2>&1 && pkginst="brew install"
+which dnf > /dev/null 2>&1 && pkginst="sudo dnf install"
+which pacman > /dev/null 2>&1 && pkginst="sudo pacman -S"
+which pkg > /dev/null 2>&1 && pkginst="pkg install"
 
 # Warning for linux users
-[[ $OSTYPE -eq 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
+[[ $OSTYPE == 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
 
 # PROGRAM STARTS
 setup_fonts
