@@ -1,5 +1,15 @@
 /*-install.log
+/emacs/.emacs.d/ac-comphist.dat
+/emacs/.emacs.d/auto-save-list/
+/emacs/.emacs.d/backup
+/emacs/.emacs.d/config.el
+/emacs/.emacs.d/elpa/
+/emacs/.emacs.d/places
+/emacs/.emacs.d/recentf
+/emacs/.emacs.d/transient/
+/emacs/.emacs.d/undo/
+/emacs/.emacs.d/.saves/
 /git/.config/git/config
-/tmux/.config/tmux/plugins/*
 /shell/.config/zsh/.zlua
 /shell/.config/zsh/.zcompdump
+/tmux/.config/tmux/plugins/*

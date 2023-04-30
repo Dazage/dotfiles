@@ -1,0 +1,10 @@
+* Welcome
+Hello there. You've happened upon my repository of configuration files for [[https://www.gnu.org/software/emacs/][GNU Emacs]]. I've made an
+effort to keep it simple and readable with helpful descriptions of what each block of code does. The
+configuration is a literate one, made possible with [[https://orgmode.org/][Org Mode]].
+
+* Disclaimer
+While cloning this repository should provide a fully functional configuration, this repository is
+intended for educational purposes and my own personal use. While you are free to do so, I can not
+guarentee a functional experience. Instead of cloning, I would suggest looking through the files and
+simply copy/pasting whatever interests you.
