@@ -1,0 +1,460 @@
+#+TITLE: dmt's emacs config
+#+AUTHOR: dmt
+
+* CUSTOM FUNCTIONS
+** Visit this file
+
+A quick and easy way to visit this configuration file. This also doubles as baby's first elisp
+function.
+
+#+BEGIN_SRC emacs-lisp
+  (defun dmt/config-visit()
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+  (global-set-key (kbd "C-c e") 'dmt/config-visit)
+#+END_SRC
+
+** Automatically switch to new window when created
+
+Whenever I open a new window(or split in vim terms) I want my cursor to automatically be located
+in that window(split).
+   
+#+BEGIN_SRC emacs-lisp
+  (defun dmt/split-window-below-and-switch ()
+    "Split the window horizontally, then switch to the new pane."
+    (interactive)
+    (split-window-below)
+    (balance-windows)
+    (other-window 1))
+
+  (defun dmt/split-window-right-and-switch ()
+    "Split the window vertically, then switch to the new pane."
+    (interactive)
+    (split-window-right)
+    (balance-windows)
+    (other-window 1))
+
+  ;; Set default 
+  (global-set-key (kbd "C-x 2") 'dmt/split-window-below-and-switch)
+  (global-set-key (kbd "C-x 3") 'dmt/split-window-right-and-switch)
+#+END_SRC
+
+** Transparent Emacs
+
+I stole this handy bit of code from somewhere but I can't recall where from. Oopsie.
+
+#+BEGIN_SRC emacs-lisp
+  (defun dmt/toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (eql (cond ((numberp alpha) alpha)
+                      ((numberp (cdr alpha)) (cdr alpha))
+                      ;; Also handle undocumented (<active> <inactive>) form.
+                      ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+           '(93 . 93) '(100 . 100)))))
+  (global-set-key (kbd "C-c M-t") 'dmt/toggle-transparency)
+#+END_SRC
+
+* PACKAGE MANAGEMENT
+** =use-package= bootstrap
+
+Fuuuuuuck me man I hate writing documentation :// i'm just a quirked up white boy bustin' it down
+sexual style who be goated with da sauce, bause
+
+#+BEGIN_SRC emacs-lisp
+  ;; Add extra package sources
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")
+			   ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  ;; Refresh package contents
+  (package-refresh-contents)
+
+  ;; require use-package and ensure packages are always installed
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+** =undo-tree=
+
+The =undo-tree= package allows me to visualize GNU Emacs's kill ring history and quickly jump
+between edits in the file with ease. By default it opens up a new frame horizontally which is a
+little counter intuitive so I set it to open horizontally with the help of this StackOverflow post:
+https://stackoverflow.com/questions/7225054/open-undo-tree-visualize-side-by-side-to-the-buffer-and-not-vertically
+
+#+BEGIN_SRC emacs-lisp
+    (use-package undo-tree
+      :init (global-undo-tree-mode)
+      :config
+      ;; Prevent undo tree files from polluting your git repo
+      (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
+
+  ;;  (defun dmt/undo-tree-split-side-by-side (original-function &rest args)
+  ;;    "Split undo-tree side-by-side"
+  ;;    (let ((split-height-threshold nil)
+  ;;          (split-width-threshold 0))
+  ;;      (apply original-function args)))
+  ;;  (advice-add 'undo-tree-visualize :around #'undo-tree-split-side-by-side)
+
+#+END_SRC
+
+** MISC PACKAGES
+
+I promise I will clean this up at some point... Right now it's messy but it gets the job done for
+the most part. :^)
+
+#+BEGIN_SRC emacs-lisp
+  ;; beacon for cool visual effects
+  ;;(use-package beacon) ;; disable beacon for now
+  (defun pulse-line (&rest _)
+    "Pulse the current line."
+    (pulse-momentary-highlight-one-line (point)))
+
+  (dolist (command '(scroll-up-command scroll-down-command
+                                       recenter-top-bottom other-window))
+    (advice-add command :after #'pulse-line))
+
+  ;; fuzzy search any buffer with `swiper`
+  (use-package swiper)
+
+  ;; laod `ibuffer` and configure it
+  (use-package ibuffer
+    :bind ("C-x C-b" . ibuffer))
+    (setq ibuffer-saved-filter-groups
+          (quote (("default"
+                   ("dired" (mode . dired-mode))
+                   ("perl" (mode . cperl-mode))
+                   ("erc" (mode . erc-mode))
+                   ("planner" (or
+                               (name . "^\\*Calendar\\*$")
+                               (name . "^diary$")
+                               (mode . muse-mode)))
+                   ("emacs" (or
+                             (name . "^\\*dashboard*\\*$")
+                             (name . "^\\*scratch\\*$")
+                             (name . "^\\*Messages\\*$")))
+                   ("svg" (name . "\\.svg")) ; group by file extension
+                   ("gnus" (or
+                            (mode . message-mode)
+                            (mode . bbdb-mode)
+                            (mode . mail-mode)
+                            (mode . gnus-group-mode)
+                            (mode . gnus-summary-mode)
+                            (mode . gnus-article-mode)
+                            (name . "^\\.bbdb$")
+                            (name . "^\\.newsrc-dribble")))))))
+
+  ;; load `ivy` and `counsel` for fuzzy search commands with descriptions
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)	
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config (ivy-mode 1))
+  (use-package ivy-rich
+    :init
+    (ivy-rich-mode 1))
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+           ("C-x b" . counsel-ibuffer)
+           ("C-x C-f" . counsel-find-file)
+           ("C-M-j" . counsel-switch-buffer) ;; switch buffer
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history)))
+
+  ;; an amazing package that structures Emacs documentation like Linux man pages (&more!)
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+  ;; pretty modeline
+  (use-package all-the-icons) ;; icons in the modeline
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-heigt 15)))
+
+  ;; cute doom themes
+  (use-package doom-themes)
+
+  ;; render hex colors based their values
+  (use-package rainbow-mode
+    :hook (prog-mode . rainbow-mode))
+
+  ;; easily differentiate parenthesis
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+  ;; NOTE: i probably don't need this package anymore
+  ;; prettify-symbols-mode is built-in and does almost the same
+  ;;(use-package pretty-mode
+  ;;  :hook (prog-mode . pretty-mode))
+
+  (use-package which-key
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.3))
+
+  (use-package elfeed
+    :config
+    (setq elfeed-feeds (quote
+                        (("https://www.redhat.com/sysadmin/rss.xml")
+                         ("https://fedoramagazine.org/feed/")
+                         ("https://protesilaos.com/master.xml")
+                         ("https://archlinux.org/feeds/news/")
+                         ("https://https://suckless.org/atom.xml")))))
+  (use-package elfeed-goodies
+    :config
+    (require 'elfeed-goodies)
+    (elfeed-goodies/setup)
+    (setq elfeed-goodies/entry-pane-size 0.5))
+
+  ;; Multiline editing with multiple cursors
+  (use-package mark-multiple
+    :bind ("C-c M-d" . 'mark-next-like-this))
+  ;; Mark region with some comfy contorl
+  (use-package expand-region
+    :bind ("C-q" . 'er/expand-region))
+
+  (use-package magit)
+#+END_SRC
+
+** =dashboard=
+
+Dashboard makes my start-up experience much better. Currently I just leave the defaults on as it
+works fine out of the box for me.
+   
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :config
+    (dashboard-setup-startup-hook))
+
+  ;; EXAMPLE OF WHAT FUTURE CONFIG MIGHT LOOK LIKE:
+                                          ;  :init
+                                          ;  (setq dashboard-banner-logo-title "RUN DMT")
+                                          ;  (setq dashboard-startup-banner 'logo)
+                                          ;  (setq dashboard-set-heading-icons t)
+                                          ;  (setq dashboard-set-file-icons t)
+                                          ;  (setq dashboard-items '((recents  . 5)
+                                          ;                         (projects . 5)
+                                          ;                         (bookmarks . 5)
+                                          ;                         (agenda . 5)
+                                          ;                         (registers . 5)))
+#+END_SRC
+
+** PROGRAMMING
+*** =yasnippet=
+
+This is neat I guess...
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :config
+    (use-package yasnippet-snippets)
+    (yas-reload-all))
+
+  (add-hook 'perl-mode-hook 'yas-minor-mode-on)
+  (add-hook 'elisp-mode-hook 'yas-minor-mode-on)
+  (add-hook 'go-mode-hook 'yas-minor-mode-on)
+#+END_SRC
+
+*** Ansible
+
+Ansible is based. Praise Red Hat!
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ansible)
+  (use-package yaml-mode)
+#+END_SRC
+*** Company
+
+I use =company= for auto- and code completion, I used to use auto-complete but sadly it has been deprecated.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :config
+    (global-company-mode)
+    (setq company-idle-delay 0.3
+          company-tooltip-limit 10
+          company-tooltip-height 20
+          company-minimum-prefix-length 1)  
+    :bind (:map company-active-map
+                ("TAB" . company-complete-common-or-cycle)
+                ("<up>" . company-select-previous)
+                ("<down>" . company-select-next)
+                ("ESC" . company-abort)))
+
+  ;; a back-end for perl, not sure if i'll end up using it though
+  ;; (use-package company-plsense)
+#+END_SRC
+
+*** Other stuff
+#+BEGIN_SRC emacs-lisp
+  ;; golang
+  (use-package go-mode)
+#+END_SRC
+
+* GUI
+** THEME
+
+Load the fantastic theme by [[https://github.com/protesilaos][Protesilaos Stavrou]] (also known as Prot) =modus-operandi=
+
+#+BEGIN_SRC emacs-lisp
+   ;; (load-theme 'doom-dark+ t)
+   ;; (setq doom-themes-enable-bold t
+   ;; (setq doom-themes-enable-italic t)
+
+  (load-theme 'modus-operandi)
+#+END_SRC
+
+** MISC 
+*** Disable title bar on Linux
+
+Often times when I'm using GNU/Linux I'll use a tiling [[https://en.wikipedia.org/wiki/X_window_manager][Window Manager]] rather than a
+full-featured [[https://en.wikipedia.org/wiki/Desktop_environment][Desktop Environment]]. I enjoy using tiling WM because they automate the placement
+of windows on the screen.
+
+Because of this, title bars aren't really necessary and they take up valuable screen real estate, so
+I disable them.
+
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'gnu/linux)
+      (modify-frame-parameters nil '((undecorated t))))
+#+END_SRC
+***
+
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'gnu/linux)
+      (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+#+END_SRC
+
+*** Disable unhelpful UI elements
+
+While it may be helpful for a newcomer to Emacs, I dislike the UI elements that Emacs shows by
+default.
+    
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+
+  ;; disable some UI elements
+  (scroll-bar-mode -1)     ; hide the scrollbar
+  (menu-bar-mode -1)       ; disable the menu bar
+  (tool-bar-mode -1)       ; disable the toolbar
+  (tooltip-mode -1)        ; disable tooltips
+#+END_SRC
+   
+*** Add a slight margin to the frame
+
+I don't want the contents of the file I'm editing to entirely fill my screen border to border so I
+give Emacs bit of breathing room.
+    
+#+BEGIN_SRC emacs-lisp
+  (set-fringe-mode 10)
+#+END_SRC
+
+* EMACS SETTINGS
+** BACKUPS
+
+The way that Emacs handles backups has always baffled me, but I would be lying if I said that the
+backups themselves hasn't saved me in the past.
+
+To keep backups simple I keep them all in the same directory: ~/.emacs.d/.saves/ and keep 6
+different revisions at any given time.
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
+  (setq backup-by-copying t)
+  (setq delete-old-versions t kept-new-versions 6 kept-old-versions 2 verion-control t)
+#+END_SRC
+
+** MISC
+
+TODO: Explain this.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Make ESC quit prompts
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+  ;; Set up the visible bell
+  (setq visible-bell t)
+
+  ;; save location of the cursor in every file
+  (save-place-mode t)
+
+  ;; Always indent using spaces instead of tabs
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+
+  ;; use y/n prompt instead of yes/no
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  ;; automatically follow symlinks
+  (setq vc-follow-symlinks t)
+
+  ;; Insert newline at character limit
+  (setq-default fill-column 100)
+  (global-set-key (kbd "C-c q") 'refill-mode)
+
+  ;; Enable line numbers
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook                               
+  term-mode-hook                                      
+  eshell-mode-hook
+  vterm-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  ;; Smooth scrolling (scroll one line at a time)
+  (setq scroll-conservatively 10000)
+
+  ;; Do what I mean! Act on region as opposed to the first word in region
+  (global-set-key (kbd "M-u") 'upcase-dwim)
+  (global-set-key (kbd "M-l") 'downcase-dwim)
+  (global-set-key (kbd "M-c") 'capitalize-dwim)
+#+END_SRC
+
+* TERMINAL ENVIRONMENT
+#+BEGIN_SRC emacs-lisp
+                                          ;     (defvar my-term-shell "/usr/bin/zsh")
+                                          ;     (defadvice ansi-term (before force-bash)
+                                          ;       (interactive (list my-term-shell)))
+                                          ;     (ad-activate 'ansi-term)
+#+END_SRC
+
+I've switched to using =vterm= as my terminal emulator within emacs. Just in case I forget, the
+dependencies =vterm= relies upon are: cmake, libtool and optionally libvterm.
+   
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :bind ("C-c t" . 'vterm ))
+#+END_SRC
+* TEMPORARY
+#+BEGIN_SRC emacs-lisp
+  (unless (or noninteractive (server-running-p))
+    (server-start))
+#+END_SRC
