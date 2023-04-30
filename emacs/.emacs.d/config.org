@@ -61,8 +61,7 @@ I stole this handy bit of code from somewhere but I can't recall where from. Oop
 * PACKAGE MANAGEMENT
 ** =use-package= bootstrap
 
-Fuuuuuuck me man I hate writing documentation :// i'm just a quirked up white boy bustin' it down
-sexual style who be goated with da sauce, bause
+Use the =use-package= package to load various packages for my GNU Emacs configuration.
 
 #+BEGIN_SRC emacs-lisp
   ;; Add extra package sources
