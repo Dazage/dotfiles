@@ -267,7 +267,8 @@ works fine out of the box for me.
 ** PROGRAMMING
 *** =yasnippet=
 
-This is neat I guess...
+YASnippet is a template system for Emacs. It allows you to type an abbreviation and automatically
+expand it into function templates.
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -282,7 +283,7 @@ This is neat I guess...
 
 *** Ansible
 
-Ansible is based. Praise Red Hat!
+Ansible is a fantastic suite of tools that enables infrastructure as code. Praise Red Hat!
 
 #+BEGIN_SRC emacs-lisp
   (use-package ansible)
@@ -332,9 +333,9 @@ Load the fantastic theme by [[https://github.com/protesilaos][Protesilaos Stavro
 ** MISC 
 *** Disable title bar on Linux
 
-Often times when I'm using GNU/Linux I'll use a tiling [[https://en.wikipedia.org/wiki/X_window_manager][Window Manager]] rather than a
-full-featured [[https://en.wikipedia.org/wiki/Desktop_environment][Desktop Environment]]. I enjoy using tiling WM because they automate the placement
-of windows on the screen.
+Often times when I'm using GNU/Linux I'll use a tiling [[https://en.wikipedia.org/wiki/X_window_manager][Window Manager]] rather than a full-featured
+[[https://en.wikipedia.org/wiki/Desktop_environment][Desktop Environment]]. I enjoy using tiling WM because they automate the placement of windows on the
+screen.
 
 Because of this, title bars aren't really necessary and they take up valuable screen real estate, so
 I disable them.
@@ -343,7 +344,8 @@ I disable them.
   (if (eq system-type 'gnu/linux)
       (modify-frame-parameters nil '((undecorated t))))
 #+END_SRC
-***
+
+*** Automatically start the frame maximized on Linux
 
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'gnu/linux)
@@ -391,7 +393,8 @@ different revisions at any given time.
 
 ** MISC
 
-TODO: Explain this.
+Here I apply various changes to default emacs behaviour. Please refer to the comments in the elisp
+code for information on what it is doing.
 
 #+BEGIN_SRC emacs-lisp
   ;; Make ESC quit prompts
