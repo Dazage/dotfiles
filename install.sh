@@ -39,8 +39,10 @@ setup_nvim() {
   if [[ ! -d $HOME/.dotfiles/nvim/.config/nvim/ ]]; then 
     git clone "https://github.com/NvChad/NvChad" "$HOME/.dotfiles/nvim/.config/nvim/" --depth 1
     # apply custom config
-    #rm -r $HOME/.dotfiles/nvim/.config/nvim/lua/custom/
-    #cp -r $HOME/.dotfiles/nvchad-custom/custom/ $HOME/.dotfiles/nvim/.config/nvim/lua/custom/
+    #rm -r $HOME/.dotfiles/nvim/.config/nvim/lua/custom
+    cd $HOME/.dotfiles/nvim/.config/nvim/lua/
+    ln -s $HOME/.dotfiles/nvchad-custom/custom .
+    cd $HOME/.dotfiles/
     echo 'congrats, make sure to run neovim to finish setup.'
   fi
 }
