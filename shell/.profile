@@ -8,10 +8,10 @@
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
+  # include .bashrc if it exists
+  if [ -f "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+  fi
 fi
 
 # set PATH so it includes user's private bin if it exists
@@ -20,6 +20,8 @@ fi
 [[ -d "$HOME/.emacs.d/bin" ]] && PATH="$HOME/.emacs.d/bin:$PATH"
 # add ~/.config/cargo/bin/ to PATH if it exists
 [[ -d "$HOME/.config/cargo/bin" ]] && PATH="$HOME/.config/cargo/bin:$PATH"
+# add homebrew packages to PATH for MacOS
+[[ -d "/opt/homebrew/" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Set some environment variables
 export PATH="$PATH:$(du "$HOME/.dotfiles/scripts/.local/bin/" | cut -f2 | tr '\n' ':' | sed 's/:*$//')"
@@ -54,5 +56,3 @@ export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 
 # Start graphical server if not already running.
 #[ "$(tty)" = "/dev/tty1" ] && ! pgrep -x Xorg >/dev/null && exec startx
-
-[[ -d /opt/homebrew/ ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
