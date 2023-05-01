@@ -38,6 +38,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 # ~/ XDG Config:
 export XDG_CONFIG_HOME="$HOME/.config"
 export ANSIBLE_CONFIG="$HOME/.config/ansible"
+export ANSIBLE_HOME="$HOME/.config/ansible"
 export CARGO_HOME="$HOME/.config/cargo"
 export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc-2.0"
 export INPUTRC="$HOME/.config/inputrc"
