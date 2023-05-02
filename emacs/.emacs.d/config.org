@@ -195,8 +195,6 @@ the most part. :^)
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-heigt 15)))
 
-  ;; cute doom themes
-  (use-package doom-themes)
 
   ;; render hex colors based their values
   (use-package rainbow-mode
@@ -319,15 +317,27 @@ I use =company= for auto- and code completion, I used to use auto-complete but s
 
 * GUI
 ** THEME
+*** Install themes
 
-Load the fantastic theme by [[https://github.com/protesilaos][Protesilaos Stavrou]] (also known as Prot) =modus-operandi=
+Start by downloading any and all themes I happen to be fond of.
 
 #+BEGIN_SRC emacs-lisp
-   ;; (load-theme 'doom-dark+ t)
-   ;; (setq doom-themes-enable-bold t
-   ;; (setq doom-themes-enable-italic t)
+  ;; cute themes that I like
+  (use-package catppuccin-theme)
+  (use-package doom-themes
+    :config
+    (setq doom-themes-enable-bold t)
+    (setq doom-themes-enable-italic t))
+#+END_SRC
 
-  (load-theme 'modus-operandi)
+*** Apply theme
+
+
+Load the theme I am currently using. I often use the the fantastic theme by [[https://github.com/protesilaos][Protesilaos Stavrou]]
+(also known as Prot) =modus-operandi=.
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'catppuccin)
 #+END_SRC
 
 ** MISC 
