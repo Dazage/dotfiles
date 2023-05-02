@@ -309,10 +309,12 @@ I use =company= for auto- and code completion, I used to use auto-complete but s
   ;; (use-package company-plsense)
 #+END_SRC
 
-*** Other stuff
+*** Languages
 #+BEGIN_SRC emacs-lisp
   ;; golang
   (use-package go-mode)
+  ;; rust
+  (use-package rust-mode)
 #+END_SRC
 
 * GUI
