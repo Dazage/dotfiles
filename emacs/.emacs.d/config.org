@@ -94,14 +94,6 @@ https://stackoverflow.com/questions/7225054/open-undo-tree-visualize-side-by-sid
       :config
       ;; Prevent undo tree files from polluting your git repo
       (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
-
-  ;;  (defun dmt/undo-tree-split-side-by-side (original-function &rest args)
-  ;;    "Split undo-tree side-by-side"
-  ;;    (let ((split-height-threshold nil)
-  ;;          (split-width-threshold 0))
-  ;;      (apply original-function args)))
-  ;;  (advice-add 'undo-tree-visualize :around #'undo-tree-split-side-by-side)
-
 #+END_SRC
 
 ** MISC PACKAGES
@@ -111,14 +103,7 @@ the most part. :^)
 
 #+BEGIN_SRC emacs-lisp
   ;; beacon for cool visual effects
-  ;;(use-package beacon) ;; disable beacon for now
-  (defun pulse-line (&rest _)
-    "Pulse the current line."
-    (pulse-momentary-highlight-one-line (point)))
-
-  (dolist (command '(scroll-up-command scroll-down-command
-                                       recenter-top-bottom other-window))
-    (advice-add command :after #'pulse-line))
+  (use-package beacon)
 
   ;; fuzzy search any buffer with `swiper`
   (use-package swiper)
@@ -189,12 +174,11 @@ the most part. :^)
     ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key] . helpful-key))
 
-  ;; pretty modeline
+  ;; use the =doom-modeline= (don't forget to run M-x all-the-icons-install-fonts!)
   (use-package all-the-icons) ;; icons in the modeline
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-heigt 15)))
-
 
   ;; render hex colors based their values
   (use-package rainbow-mode
@@ -250,16 +234,16 @@ works fine out of the box for me.
     (dashboard-setup-startup-hook))
 
   ;; EXAMPLE OF WHAT FUTURE CONFIG MIGHT LOOK LIKE:
-                                          ;  :init
-                                          ;  (setq dashboard-banner-logo-title "RUN DMT")
-                                          ;  (setq dashboard-startup-banner 'logo)
-                                          ;  (setq dashboard-set-heading-icons t)
-                                          ;  (setq dashboard-set-file-icons t)
-                                          ;  (setq dashboard-items '((recents  . 5)
-                                          ;                         (projects . 5)
-                                          ;                         (bookmarks . 5)
-                                          ;                         (agenda . 5)
-                                          ;                         (registers . 5)))
+  ;:init
+  ;(setq dashboard-banner-logo-title "RUN DMT")
+  ;(setq dashboard-startup-banner 'logo)
+  ;(setq dashboard-set-heading-icons t)
+  ;(setq dashboard-set-file-icons t)
+  ;(setq dashboard-items '((recents  . 5)
+  ;                        (projects . 5)
+  ;                        (bookmarks . 5)
+  ;                        (agenda . 5)
+  ;                        (registers . 5)))
 #+END_SRC
 
 ** PROGRAMMING
@@ -324,7 +308,6 @@ I use =company= for auto- and code completion, I used to use auto-complete but s
 Start by downloading any and all themes I happen to be fond of.
 
 #+BEGIN_SRC emacs-lisp
-  ;; cute themes that I like
   (use-package catppuccin-theme)
   (use-package doom-themes
     :config
@@ -334,9 +317,9 @@ Start by downloading any and all themes I happen to be fond of.
 
 *** Apply theme
 
-
-Load the theme I am currently using. I often use the the fantastic theme by [[https://github.com/protesilaos][Protesilaos Stavrou]]
-(also known as Prot) =modus-operandi=.
+Load the theme I am currently using. While it's not in use now, I feel an obligation to mention one
+of my favourite themes, =modus-operandi=, created by [[https://github.com/protesilaos][Protesilaos Stavrou]] (also known as Prot) and to
+congratulate him for the theme being included as part of GNU Emacs as of version 28. 🎉
 
 #+BEGIN_SRC emacs-lisp
   (load-theme 'catppuccin)
@@ -454,10 +437,10 @@ code for information on what it is doing.
 
 * TERMINAL ENVIRONMENT
 #+BEGIN_SRC emacs-lisp
-                                          ;     (defvar my-term-shell "/usr/bin/zsh")
-                                          ;     (defadvice ansi-term (before force-bash)
-                                          ;       (interactive (list my-term-shell)))
-                                          ;     (ad-activate 'ansi-term)
+  ;     (defvar my-term-shell "/usr/bin/zsh")
+  ;     (defadvice ansi-term (before force-bash)
+  ;       (interactive (list my-term-shell)))
+  ;     (ad-activate 'ansi-term)
 #+END_SRC
 
 I've switched to using =vterm= as my terminal emulator within emacs. Just in case I forget, the
