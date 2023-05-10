@@ -2,7 +2,17 @@
 
 # install all packages provided as arguments, log relevant output and ignore errors
 pkginstall() {
-  $pkginst "$@" >> "$HOME/.dotfiles/$(date +%F)-install.log" 2> /dev/null
+  if [ $ansible_detected == 1 ]; then
+    for i in "$@"; do
+      echo "installing $i..."
+      $pkginst "name=$i state=present" >> "$HOME/.dotfiles/$(date +%F)-install.log" 2> /dev/null
+    done
+  else
+    for i in "$@"; do
+      echo "installing $i..."
+      $pkginst "$@" 2> /dev/null
+    done
+  fi
 }
 
 setup_fonts() {
@@ -66,22 +76,38 @@ setup_placeholders() {
   stow -t "$HOME" z-placeholders
 }
 
-# DETERMINE PACKAGE MANAGER
-which brew > /dev/null 2>&1 && pkginst="brew install"
-which dnf > /dev/null 2>&1 && pkginst="sudo dnf install"
-which pacman > /dev/null 2>&1 && pkginst="sudo pacman -S"
-which pkg > /dev/null 2>&1 && pkginst="pkg install"
+determine_pkgmanager() {
+  # Is Ansible installed?
+  which ansible > /dev/null 2>&1 && ansible_detected=1 || ansible_detected=0
 
-# Warning for linux users
-[[ $OSTYPE == 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
+  # If Ansible is installed, use it to install packages.
+  if [ $ansible_detected == 1 ]; then
+    echo 'Ansible detected, skipping package manager detection.'
+    pkginst='ansible -b localhost -m ansible.builtin.package -a'
+  else # Otherwise, guess the package manager for the current OS.
+    # Warning for linux users
+    [[ $OSTYPE == 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
+    which brew > /dev/null 2>&1 && pkginst="brew install"
+    which apt > /dev/null 2>&1 && pkginst="sudo apt install"
+    which dnf > /dev/null 2>&1 && pkginst="sudo dnf install"
+    which pacman > /dev/null 2>&1 && pkginst="sudo pacman -S"
+    if [ -z "$pkginst" ]; then
+      echo 'No package manager detected, exiting.'
+      echo 'Please consider installing ansible to automate package installation.'
+      exit 1
+    fi
+  fi
+}
 
 # PROGRAM STARTS
+determine_pkgmanager
+
+# Setup all the things!
 setup_fonts
 setup_git
 setup_gnupg
-#setup_scripts
+setup_scripts
 setup_shell
 setup_tmux
 setup_nvim
 setup_placeholders
-
