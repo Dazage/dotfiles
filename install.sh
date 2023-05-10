@@ -47,22 +47,21 @@ setup_nvim() {
   fi
 }
 
-setup_scripts() {
-  echo 'uh oh stinky'
-}
-
-# My shell consists of Zsh and some scripts.
+# For my shell environment I use Zsh and some custom scripts.
 setup_shell() {
   pkginstall zsh
   stow -t "$HOME" shell
+  stow -t "$HOME" scripts
 }
 
+# I use tmux as my terminal multiplexer.
 setup_tmux() {
   git clone "https://github.com/tmux-plugins/tpm" "$HOME/.dotfiles/tmux/.config/tmux/plugins/tpm" > /dev/null 2>&1
   stow -t "$HOME" tmux
   pkginstall tmux 
 }
 
+# I don't want clutter in my home directory so I keep empty placeholders for some programs.
 setup_placeholders() {
   stow -t "$HOME" z-placeholders
 }
