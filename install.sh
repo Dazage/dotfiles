@@ -106,8 +106,14 @@ determine_pkgmanager() {
   fi
 }
 
+# Install stow if it's not already installed.
+ensure_stow() {
+  which stow > /dev/null 2>&1 || pkginstall stow
+}
+
 # PROGRAM STARTS
 determine_pkgmanager
+ensure_stow
 
 # Setup all the things!
 setup_fonts
