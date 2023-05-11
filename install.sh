@@ -81,12 +81,16 @@ setup_fun_stuff() {
 }
 
 determine_pkgmanager() {
+  # Password warning for linux users
+  [[ $OSTYPE == 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
+
   # Is Ansible installed?
   which ansible > /dev/null 2>&1 && ansible_detected=1 || ansible_detected=0
 
   # If Ansible is installed, use it to install packages.
   if [ $ansible_detected == 1 ]; then
-    echo 'Ansible detected, skipping package manager detection.'
+    echo 'Ansible detected, gathering system info...'
+    ansible -b localhost -m ansible.builtin.setup --ask-become-pass > /dev/null 2>&1
     pkginst='ansible -b localhost -m ansible.builtin.package -a'
   else # Otherwise, guess the package manager for the current OS.
     # Warning for linux users
