@@ -94,7 +94,6 @@ determine_pkgmanager() {
     pkginst='ansible -b localhost -m ansible.builtin.package -a'
   else # Otherwise, guess the package manager for the current OS.
     # Warning for linux users
-    [[ $OSTYPE == 'linux-gnu' ]] && echo 'WARNING: You may need to input your super user password to install packages.'
     which brew > /dev/null 2>&1 && pkginst="brew install"
     which apt > /dev/null 2>&1 && pkginst="sudo apt install"
     which dnf > /dev/null 2>&1 && pkginst="sudo dnf install"
