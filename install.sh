@@ -76,6 +76,10 @@ setup_placeholders() {
   stow -t "$HOME" z-placeholders
 }
 
+setup_fun_stuff() {
+  pkginstall cowsay fortune-mod lolcat
+}
+
 determine_pkgmanager() {
   # Is Ansible installed?
   which ansible > /dev/null 2>&1 && ansible_detected=1 || ansible_detected=0
@@ -111,3 +115,4 @@ setup_shell
 setup_tmux
 setup_nvim
 setup_placeholders
+setup_fun_stuff
