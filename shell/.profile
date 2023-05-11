@@ -28,7 +28,9 @@ export PATH="$PATH:$(du "$HOME/.dotfiles/scripts/.local/bin/" | cut -f2 | tr '\n
 export QT_QPA_PLATFORMTHEME="qt5ct" # Edit Qt5 themes with qt5ct
 
 # Export preferred programs
+export BROWSER="firefox"
 export EDITOR="nvim"
+export TERM='xterm-256color'
 export TERMINAL="konsole"
 export BROWSER="firefox"
 
