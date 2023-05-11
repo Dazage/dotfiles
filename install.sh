@@ -5,12 +5,12 @@ pkginstall() {
   if [ $ansible_detected == 1 ]; then
     for i in "$@"; do
       echo "installing $i..."
-      $pkginst "name=$i state=present" >> "$HOME/.dotfiles/$(date +%F)-install.log" 2> /dev/null
+      $pkginst "name=$i state=present" > /dev/null 2>&1
     done
   else
     for i in "$@"; do
       echo "installing $i..."
-      $pkginst "$@" 2> /dev/null
+      $pkginst "$@" 2> /dev/null 2>&1
     done
   fi
 }
