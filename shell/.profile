@@ -32,7 +32,6 @@ export BROWSER="firefox"
 export EDITOR="nvim"
 export TERM='xterm-256color'
 export TERMINAL="konsole"
-export BROWSER="firefox"
 
 # ~/ XDG Cache:
 export XDG_CACHE_HOME="$HOME/.cache"
