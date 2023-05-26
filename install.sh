@@ -22,13 +22,17 @@ setup_fonts() {
 
 setup_git() {
   git_config="$HOME/.dotfiles/git/.config/git/config"
-  if ! grep 'setup_done' "$git_config" 1> /dev/null; then
+  if [[ ! -f "$git_config" ]]; then
     echo 'Setting up git config...'
+    mkdir -p "$HOME/.dotfiles/git/.config/git"
     read -rp 'Enter your GitHub username: ' git_name
-    sed -i '' "s/^name.*/name = $git_name/g" "$git_config"
     read -rp 'Enter your GitHub email address: ' git_email
-    sed -i '' "s/^email.*/email = $git_email/g" "$git_config"
-    echo '# setup_done #' >> "$git_config"
+    echo -e \
+"[init]\n \
+defaultBranch = main\n \
+[user]\n \
+email = $git_email\n \
+name  = $git_name" >> "$git_config"
     stow -t "$HOME" git
   else
     echo "Skipping git config..."
@@ -119,7 +123,7 @@ ensure_stow
 setup_fonts
 setup_git
 setup_gnupg
-setup_scripts
+#setup_scripts
 setup_shell
 setup_tmux
 setup_nvim
