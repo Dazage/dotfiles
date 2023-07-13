@@ -2,8 +2,8 @@
 
 # package manager
 alias \
-    pkg="sudo dnf" \
-    upd="sudo dnf upgrade"
+    pkg="sudo zypper" \
+    upd="sudo zypper update"
 
 # standard utilities
 alias \
