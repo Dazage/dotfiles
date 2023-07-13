@@ -221,6 +221,8 @@ the most part. :^)
     :bind ("C-q" . 'er/expand-region))
 
   (use-package magit)
+  
+  (use-package markdown-mode)
 #+END_SRC
 
 ** =dashboard=
