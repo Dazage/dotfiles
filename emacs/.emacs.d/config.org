@@ -373,6 +373,14 @@ give Emacs bit of breathing room.
   (set-fringe-mode 10)
 #+END_SRC
 
+*** Set default font size
+
+The value is in 1/10pt, so 100 will equate to 10pt.
+
+#+BEGIN_SRC
+(set-face-attribute 'default nil :height 160)
+#+END_SRC
+
 * EMACS SETTINGS
 ** BACKUPS
 
